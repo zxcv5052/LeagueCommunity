@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/LeagueCommunity-API.iml" filepath="$PROJECT_DIR$/LeagueCommunity-API.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LeagueC-API/LeagueC-API.iml" filepath="$PROJECT_DIR$/LeagueC-API/LeagueC-API.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LeagueCommunity.iml" filepath="$PROJECT_DIR$/LeagueCommunity.iml" />
     </modules>
   </component>
 </project>

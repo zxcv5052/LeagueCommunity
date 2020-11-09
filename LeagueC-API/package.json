@@ -1,5 +1,5 @@
 {
-  "name": "leaguecommunity-api",
+  "name": "server-api",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -12,5 +12,9 @@
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "pug": "2.0.0-beta11"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "mysql2": "^2.2.5"
   }
 }
