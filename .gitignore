@@ -1,4 +1,4 @@
 # Project exclude paths
 node_modules/
-/LeagueC-API/env/
-/LeagueC-API/src/queries
+env/
+queries/
