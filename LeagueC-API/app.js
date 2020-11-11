@@ -4,6 +4,12 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
+if(process.env.NODE_ENV === 'production') {
+  require('dotenv').config({ path: path.join(__dirname, 'src/env/production.env') });
+} else {
+  require('dotenv').config({path: path.join(__dirname, 'src/env/development.env')});
+}
+
 const indexRouter = require('./src/routes/index');
 const usersRouter = require('./src/routes/users');
 const validationRouter = require('./src/routes/validation');
