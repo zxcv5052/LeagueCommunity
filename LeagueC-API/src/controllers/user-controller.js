@@ -1,11 +1,11 @@
 "use strict"
-
 const userService = require('../services/user-service');
 
 // 회원가입
 exports.saveUser = async function(request,response) {
     const user = request.body;
     const flag = await userService.saveUser(user);
+
     if(flag) {
         response.send(true);
     }else{
@@ -16,9 +16,9 @@ exports.saveUser = async function(request,response) {
 // Login 확인
 exports.loginUser = async function(request,response) {
     const user = request.body;
-    const flag = await userService.login(user);
-    if(flag) {
-        response.send(true);
+    const u = await userService.login(user, request.app.get('jwt-secret'));
+    if(u) {
+        response.send(u);
     }else{
         response.send(false);
     }
@@ -28,3 +28,4 @@ exports.loginUser = async function(request,response) {
 exports.restrictUser = async function(request,response) {
 
 }
+

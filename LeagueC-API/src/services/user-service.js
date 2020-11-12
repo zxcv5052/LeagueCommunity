@@ -1,4 +1,6 @@
-const conn = require('../database/conn')
+const conn = require('../database/conn');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const userQuery = require('../queries/user-query');
 
 /**
@@ -9,12 +11,13 @@ const userQuery = require('../queries/user-query');
 exports.saveUser = async (user)=> {
     try{
         const {email, password, name} = user;
-        const format = [email, password, name];
-        await conn.execute(userQuery.saveUser, format);
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(password, salt);
+        const format = [email, hash, name];
+        await conn.query(userQuery.saveUser, format);
 
         return true;
     }catch (e) {
-        console.log(e)
         return false;
     }
 };
@@ -24,13 +27,38 @@ exports.saveUser = async (user)=> {
  * @param user
  * @returns
  */
-exports.login = async (user) => {
+exports.login = async (user, secret) => {
     try{
         const { email, password } = user;
-        const format = [email, password];
-        const u = await conn.execute(userQuery.getLoginUser, format);
-        return u[0].length !== 0;
+        const u = await conn.query(userQuery.getUserByEmail, [email]);
+
+        if(u[0].length === 0){
+            return null;
+        }else{
+            const encryption = u[0][0].password;
+            const isMatch = await bcrypt.compare(password, encryption);
+            if(isMatch) {
+                  const p = async function f() {
+                    const jwtToken = await jwt.sign(
+                        {
+                            _id: u[0][0].email,
+                            username: u[0][0].name,
+                            admin: u[0][0].role
+                        },
+                        secret,
+                        {
+                            expiresIn: '7d',
+                            issuer: 'league-community',
+                            subject: 'userInfo'
+                        });
+                    return jwtToken;
+                }();
+                  return p;
+            } else {
+                return null;
+            }
+        }
     }catch (e) {
-        return false;
+        return null;
     }
 }

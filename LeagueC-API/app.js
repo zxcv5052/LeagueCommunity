@@ -9,12 +9,14 @@ if(process.env.NODE_ENV === 'production') {
 } else {
   require('dotenv').config({path: path.join(__dirname, 'src/env/development.env')});
 }
-
 const indexRouter = require('./src/routes/index');
 const usersRouter = require('./src/routes/users');
 const validationRouter = require('./src/routes/validation');
 
 const app = express();
+
+app.set('jwt-secret', process.env.tokenSecret);
+
 
 app.use(logger('dev'));
 app.use(express.json());
