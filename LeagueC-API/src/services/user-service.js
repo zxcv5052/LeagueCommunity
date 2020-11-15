@@ -13,8 +13,7 @@ exports.saveUser = async (user)=> {
         const {email, password, name} = user;
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(password, salt);
-        const format = [email, hash, name];
-        await conn.query(userQuery.saveUser, format);
+        await conn.query(userQuery.saveUser, [email, hash, name]);
 
         return true;
     }catch (e) {
@@ -51,14 +50,16 @@ exports.login = async (user, secret) => {
                             issuer: 'league-community',
                             subject: 'userInfo'
                         });
+                    await conn.query(userQuery.loginUser, [jwtToken, u[0][0].user_id]);
                     return jwtToken;
-                }();
-                  return p;
+                    }();
+                return p;
             } else {
                 return null;
             }
         }
     }catch (e) {
+        console.log(e);
         return null;
     }
 }
